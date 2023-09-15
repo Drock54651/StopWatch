@@ -46,7 +46,7 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 
 
 		#* BUTTONS
-		self.lap_button = ctk.CTkButton(
+		self.lap_button = ctk.CTkButton( #! lap button
 			self, 
 			text = 'lap',
 			command = lambda: print('lap'),
@@ -54,17 +54,18 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 			fg_color = GREY,
 			font = button_font)
 		
-		self.lap_button.grid(row = 0, column = 1, columnspan = 1)
+		self.lap_button.grid(row = 0, column = 1, columnspan = 1, sticky = 'news')
 
-		self.reset_button = ctk.CTkButton(
+		self.start_button = ctk.CTkButton( #! start button
 			self, 
 			text = 'Start',
 			command = lambda: print('start'),
 			fg_color = GREEN,
 			hover_color = GREEN_HIGHLIGHT,
-			text_color = GREEN_TEXT)
+			text_color = GREEN_TEXT,
+			font = button_font)
 		
-		self.reset_button.grid(row = 0, column = 3, columnspan = 1)
+		self.start_button.grid(row = 0, column = 3, columnspan = 1, sticky = 'news')
 
 if __name__ == '__main__':
 	App()
