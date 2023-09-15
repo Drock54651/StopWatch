@@ -22,7 +22,7 @@ class App(ctk.CTk):
 		#* DATA
 
 		#* WIDGETS
-		self.control_buttons = ControlButtons(self)
+		self.control_buttons = ControlButtons(self, self.button_fonts)
 
 
 		#* RUN
@@ -32,7 +32,7 @@ class App(ctk.CTk):
 
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
-	def __init__(self, parent):
+	def __init__(self, parent, button_font):
 		super().__init__(parent, corner_radius = 0, fg_color = 'transparent')
 		self.grid(row = 1, column = 0, sticky = 'news')
 
@@ -51,12 +51,19 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 			text = 'lap',
 			command = lambda: print('lap'),
 			state = 'disabled',
-			fg_color = GREY
-			)
+			fg_color = GREY,
+			font = button_font)
 		
 		self.lap_button.grid(row = 0, column = 1, columnspan = 1)
 
-		self.reset_button = ctk.CTkButton(self, text = 'test1')
+		self.reset_button = ctk.CTkButton(
+			self, 
+			text = 'Start',
+			command = lambda: print('start'),
+			fg_color = GREEN,
+			hover_color = GREEN_HIGHLIGHT,
+			text_color = GREEN_TEXT)
+		
 		self.reset_button.grid(row = 0, column = 3, columnspan = 1)
 
 if __name__ == '__main__':
