@@ -1,4 +1,4 @@
-# size data
+# size data #! usually with visual settings like colors, its best to put inside settings and not use 'black' as it will be much easier to change stuff, aka its more flexible
 CENTER_SIZE = 8
 LINE_WIDTH = 6
 FONT = 'Helvetica'
