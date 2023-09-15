@@ -36,6 +36,28 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 		super().__init__(parent, corner_radius = 0, fg_color = 'transparent')
 		self.grid(row = 1, column = 0, sticky = 'news')
 
+		#* GRID LAYOUT
+		self.rowconfigure(0, weight = 1, uniform = 'b')
+		self.columnconfigure(0, weight = 1, uniform = 'b') #! weights 1 for padding
+		self.columnconfigure(1, weight = 9, uniform = 'b')
+		self.columnconfigure(2, weight = 1, uniform = 'b')
+		self.columnconfigure(3, weight = 9, uniform = 'b')
+		self.columnconfigure(4, weight = 1, uniform = 'b')
+
+
+		#* BUTTONS
+		self.lap_button = ctk.CTkButton(
+			self, 
+			text = 'lap',
+			command = lambda: print('lap'),
+			state = 'disabled',
+			fg_color = GREY
+			)
+		
+		self.lap_button.grid(row = 0, column = 1, columnspan = 1)
+
+		self.reset_button = ctk.CTkButton(self, text = 'test1')
+		self.reset_button.grid(row = 0, column = 3, columnspan = 1)
 
 if __name__ == '__main__':
 	App()
