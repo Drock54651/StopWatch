@@ -78,7 +78,7 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 		self.lap_button = ctk.CTkButton( #! lap button
 			self, 
 			text = 'lap',
-			command = lambda: print('lap'),
+			command = self.lap_handler,
 			state = 'disabled',
 			fg_color = GREY,
 			font = button_font)
@@ -96,18 +96,40 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 		
 		self.start_button.grid(row = 0, column = 3, columnspan = 1, sticky = 'news')
 
-	def start_handler(self): #! handles the start, pause, and resume methods
+	def start_handler(self): #! handles the start, pause, and resume methods for start button
 		if self.state == 'OFF':
 			self.start()
 			self.state = 'ON'
 
 		elif self.state == 'ON':
 			self.pause()
-			self.state == 'PAUSE'
+			self.state = 'PAUSE'
 
 		elif self.state == 'PAUSE':
 			self.resume()
 			self.state = 'ON'
+
+		self.update_button()	
+
+
+	def lap_handler(self): #! handles create_lap and reset method for lap button
+		if self.state == 'ON':
+			self.create_lap()
+
+		else:
+			self.reset()
+			self.state = 'OFF'
+
+		self.update_button()			
+	
+	def update_button(self): #! button state changes in the lap and start handlers, therefore functionality of buttons changes
+		if self.state == 'ON':
+			self.lap_button.configure(state = 'normal')
+		elif self.state == 'OFF':
+			pass
+		elif self.state == 'PAUSE':
+			pass
+
 
 
 if __name__ == '__main__':
