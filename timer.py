@@ -109,7 +109,7 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 			self.resume()
 			self.state = 'ON'
 
-		self.update_button()	
+		self.update_buttons()	
 
 
 	def lap_handler(self): #! handles create_lap and reset method for lap button
@@ -120,16 +120,20 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 			self.reset()
 			self.state = 'OFF'
 
-		self.update_button()			
+		self.update_buttons()			
 	
-	def update_button(self): #! button state changes in the lap and start handlers, therefore functionality of buttons changes
+	def update_buttons(self): #! button state changes in the lap and start handlers, therefore functionality of buttons changes
 		if self.state == 'ON':
-			self.lap_button.configure(state = 'normal')
+			self.start_button.configure(text = 'Stop', fg_color = RED, hover_color = RED_HIGHLIGHT, text_color = RED_TEXT)
+			self.lap_button.configure(state = 'normal',  text = 'Lap', fg_color = ORANGE_DARK, text_color = ORANGE_DARK_TEXT, hover_color = ORANGE_HIGHLIGHT)
+			
 		elif self.state == 'OFF':
-			pass
-		elif self.state == 'PAUSE':
-			pass
+			self.start_button.configure(text = 'Start')
+			self.lap_button.configure(state = 'disabled', text = 'Lap', fg_color = GREY)
 
+		elif self.state == 'PAUSE':
+			self.start_button.configure(text = 'Start', fg_color = GREEN, hover_color = GREEN_HIGHLIGHT, text_color = GREEN_TEXT)
+			self.lap_button.configure(text = 'Reset')
 
 
 if __name__ == '__main__':
