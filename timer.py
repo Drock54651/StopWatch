@@ -2,7 +2,7 @@ import customtkinter as ctk
 from settings import *
 
 
-class App(ctk.CTk):
+class App(ctk.CTk): #! window and also methods for button functionality logic
 	def __init__(self):
 		super().__init__(fg_color = BLACK)
 		self.title('')
