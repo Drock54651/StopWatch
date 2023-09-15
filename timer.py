@@ -8,7 +8,7 @@ class App(ctk.CTk):
 		self.title('')
 		self.geometry('300x600')
 		self.iconbitmap('empty.ico')
-
+		self.resizable(False,False)
 		#* RUN
 		self.mainloop()
 
