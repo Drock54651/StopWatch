@@ -75,11 +75,14 @@ class Clock(tk.Canvas):
 		self.draw_center()
 
 	def draw_center(self): #! Draw the circle center of the clock
-		self.create_oval(self.center[0] - CENTER_SIZE, #! left
-				   self.center[1] - CENTER_SIZE, #! Top
-				   self.center[0] + CENTER_SIZE, #! Right
-				   self.center[1] + CENTER_SIZE, #! Bottom
-				   fill = ORANGE)
+		self.create_oval(
+				self.center[0] - CENTER_SIZE, #! left
+				self.center[1] - CENTER_SIZE, #! Top
+				self.center[0] + CENTER_SIZE, #! Right
+				self.center[1] + CENTER_SIZE, #! Bottom
+				fill = BLACK,
+				width = LINE_WIDTH,
+				outline = ORANGE)
 
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
