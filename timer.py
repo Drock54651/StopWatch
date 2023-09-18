@@ -52,7 +52,7 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 		self.timer.reset()
 
 	def create_lap(self):
-		print('lap')
+		print(self.timer.get_time())
 
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
@@ -146,17 +146,35 @@ class Timer:
 		self.is_paused = False
 
 	def start(self):
-		self.start_time = time()
+		self.start_time = time() #! time in seconds since 1970, this is fixed when start is pressed
 		print('start')
 
 	def pause(self):
+		self.pause_time = time()
+		self.is_paused = True
 		print('pause')
 
 	def resume(self):
-		print('resume')
+		elapsed_time = time() - self.pause_time
+		self.start_time += elapsed_time
+		self.is_paused = False
 
 	def reset(self):
-		print('reset')
+		self.pause_time = 0
+		self.is_paused = False
+ 
+	def get_time(self):
+		if self.is_paused:
+			return int(round(self.pause_time - self.start_time, 2) * 1000)
+		
+		else:
+			return int(round(time() - self.start_time, 2) * 1000) #! ms cause easier to work with
+
+
+
+
+
+
 
 if __name__ == '__main__':
 	App()
