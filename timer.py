@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from settings import *
 from time import time
-
+import tkinter as tk
 
 class App(ctk.CTk): #! window and also methods for button functionality logic
 	def __init__(self):
@@ -31,7 +31,8 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 			resume = self.resume,
 			reset = self.reset,
 			create_lap = self.create_lap)
-		
+		self.clock = Clock(self)
+
 		#* TIMER LOGIC
 		self.timer = Timer()
 
@@ -53,6 +54,18 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 
 	def create_lap(self):
 		print(self.timer.get_time())
+
+class Clock(tk.Canvas):
+	def __init__(self, parent):
+		super().__init__(parent, background = 'Black', bd = 0, highlightthickness = 0, relief = 'ridge')
+		self.grid(row = 0, column = 0, sticky = 'news', padx = 5, pady = 5)
+		self.bind('<Configure>', self.setup)
+
+
+	def setup(self, event): #! gets canvas width and height, in which can be used for positioning other stuff
+		self.center = (event.width / 2, event.height / 2) 
+		self.size(event.width, event.height)
+
 
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
@@ -139,7 +152,7 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 			self.start_button.configure(text = 'Start', fg_color = GREEN, hover_color = GREEN_HIGHLIGHT, text_color = GREEN_TEXT)
 			self.lap_button.configure(text = 'Reset')
 
-class Timer:
+class Timer: #! Timer Logic
 	def __init__(self):
 		self.start_time = None
 		self.pause_time = None
