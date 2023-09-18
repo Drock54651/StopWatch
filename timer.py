@@ -60,12 +60,26 @@ class Clock(tk.Canvas):
 		super().__init__(parent, background = 'Black', bd = 0, highlightthickness = 0, relief = 'ridge')
 		self.grid(row = 0, column = 0, sticky = 'news', padx = 5, pady = 5)
 		self.bind('<Configure>', self.setup)
+		
 
-
-	def setup(self, event): #! gets canvas width and height, in which can be used for positioning other stuff
+	def setup(self, event): #! gets canvas width and height, in which can be used for drawing other stuff
 		self.center = (event.width / 2, event.height / 2) 
-		self.size(event.width, event.height)
+		self.size = (event.width, event.height)
 
+
+		#* DRAW CLOCK
+		self.draw()
+
+	def draw(self, milliseconds = 0): #! contains all the parts of the clock to draw
+
+		self.draw_center()
+
+	def draw_center(self): #! Draw the circle center of the clock
+		self.create_oval(self.center[0] - CENTER_SIZE, #! left
+				   self.center[1] - CENTER_SIZE, #! Top
+				   self.center[0] + CENTER_SIZE, #! Right
+				   self.center[1] + CENTER_SIZE, #! Bottom
+				   fill = ORANGE)
 
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
