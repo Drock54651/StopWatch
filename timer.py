@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from settings import *
+from time import time
 
 
 class App(ctk.CTk): #! window and also methods for button functionality logic
@@ -30,22 +31,25 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 			resume = self.resume,
 			reset = self.reset,
 			create_lap = self.create_lap)
+		
+		#* TIMER LOGIC
+		self.timer = Timer()
 
 		#* RUN
 		self.mainloop()
 
 
 	def start(self):
-		print('start')
+		self.timer.start()
 
 	def pause(self):
-		print('pause')
+		self.timer.pause()
 
 	def resume(self):
-		print('resume')
+		self.timer.resume()
 
 	def reset(self):
-		print('reset')
+		self.timer.reset()
 
 	def create_lap(self):
 		print('lap')
@@ -135,6 +139,24 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 			self.start_button.configure(text = 'Start', fg_color = GREEN, hover_color = GREEN_HIGHLIGHT, text_color = GREEN_TEXT)
 			self.lap_button.configure(text = 'Reset')
 
+class Timer:
+	def __init__(self):
+		self.start_time = None
+		self.pause_time = None
+		self.is_paused = False
+
+	def start(self):
+		self.start_time = time()
+		print('start')
+
+	def pause(self):
+		print('pause')
+
+	def resume(self):
+		print('resume')
+
+	def reset(self):
+		print('reset')
 
 if __name__ == '__main__':
 	App()
