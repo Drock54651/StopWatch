@@ -2,6 +2,7 @@ import customtkinter as ctk
 from settings import *
 from time import time
 import tkinter as tk
+from math import sin, cos, radians
 
 class App(ctk.CTk): #! window and also methods for button functionality logic
 	def __init__(self):
@@ -55,24 +56,27 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 	def create_lap(self):
 		print(self.timer.get_time())
 
-class Clock(tk.Canvas):
+class Clock(tk.Canvas): #! drawing the clock itself
 	def __init__(self, parent):
 		super().__init__(parent, background = 'Black', bd = 0, highlightthickness = 0, relief = 'ridge')
 		self.grid(row = 0, column = 0, sticky = 'news', padx = 5, pady = 5)
 		self.bind('<Configure>', self.setup)
 		
 
-	def setup(self, event): #! gets canvas width and height, in which can be used for drawing other stuff
+	def setup(self, event): #! gets canvas width and height, radii, in which can be used for drawing other stuff
 		self.center = (event.width / 2, event.height / 2) 
 		self.size = (event.width, event.height)
 
+		#* RADIUS
+		self.outer_radius = (event.width / 2) * .95 #! so theres a tiny gap to make it look nicer
+		self.inner_radius = (event.width / 2) * .85
 
 		#* DRAW CLOCK
 		self.draw()
 
 	def draw(self, milliseconds = 0): #! contains all the parts of the clock to draw
-
 		self.draw_center()
+		self.draw_clock()
 
 	def draw_center(self): #! Draw the circle center of the clock
 		self.create_oval(
@@ -83,7 +87,21 @@ class Clock(tk.Canvas):
 				fill = BLACK,
 				width = LINE_WIDTH,
 				outline = ORANGE)
+	
+	def draw_clock(self): #! clock lines
+		for angle in range(360):
+			sin_a = sin(radians(angle - 90))
+			cos_a = cos(radians(angle - 90))
 
+			x_outer = self.center[0] + (cos_a * self.outer_radius)
+			y_outer = self.center[1] + (sin_a * self.outer_radius)
+
+			if angle % 30 == 0:
+				x_inner = self.center[0] + (cos_a * self.inner_radius)
+				y_inner = self.center[1] + (sin_a * self.inner_radius)
+
+				self.create_line((x_inner, y_inner), (x_outer, y_outer), fill = WHITE, width = LINE_WIDTH)
+				# self.create_oval(x_outer - 4, y_outer - 4, x_outer + 4, y_outer + 4, fill = 'orange') #! to visualize outer circle
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 	def __init__(self, parent, button_font, start, pause, resume, reset, create_lap):
