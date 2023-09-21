@@ -59,9 +59,13 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 
 	def resume(self):
 		self.timer.resume()
+		self.active = True
+		self.animate()
 
 	def reset(self):
 		self.timer.reset()
+		self.active = False
+		self.clock.draw(0)
 
 	def create_lap(self):
 		print(self.timer.get_time())
@@ -95,6 +99,7 @@ class Clock(tk.Canvas): #! drawing the clock itself
 		angle = (seconds % 60) * 6 #! grabs only the seconds, multiply by 6, as 1 second is every 6 degrees -> (360 / 60)
 		
 		self.delete('all')
+		self.create_rectangle((0,0), self.size, fill = BLACK)
 
 		self.draw_clock()
 		self.draw_hand(angle)
