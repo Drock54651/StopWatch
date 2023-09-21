@@ -69,8 +69,9 @@ class Clock(tk.Canvas): #! drawing the clock itself
 
 		#* RADIUS
 		self.outer_radius = (event.width / 2) * .95 #! smaller the number the smaller the radius, i.e closer to center 
-		self.inner_radius = (event.width / 2) * .85
 		self.middle_radius = (event.width / 2) * .9
+		self.inner_radius = (event.width / 2) * .85
+		
 		self.number_radius = (event.width / 2) * .7
 		self.start_radius = (event.width / 2) * .2
 
