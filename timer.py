@@ -68,16 +68,19 @@ class Clock(tk.Canvas): #! drawing the clock itself
 		self.size = (event.width, event.height)
 
 		#* RADIUS
-		self.outer_radius = (event.width / 2) * .95 #! so theres a tiny gap to make it look nicer
+		self.outer_radius = (event.width / 2) * .95 #! smaller the number the smaller the radius, i.e closer to center 
 		self.inner_radius = (event.width / 2) * .85
 		self.middle_radius = (event.width / 2) * .9
+		self.number_radius = (event.width / 2) * .7
+		self.start_radius = (event.width / 2) * .2
 
 		#* DRAW CLOCK
 		self.draw()
 
 	def draw(self, milliseconds = 0): #! contains all the parts of the clock to draw
-		self.draw_center()
 		self.draw_clock()
+		self.draw_hand(30)
+		self.draw_center()
 
 	def draw_center(self): #! Draw the circle center of the clock
 		self.create_oval(
@@ -88,27 +91,48 @@ class Clock(tk.Canvas): #! drawing the clock itself
 				fill = BLACK,
 				width = LINE_WIDTH,
 				outline = ORANGE)
-	
+
 	def draw_clock(self): #! clock lines
 		for angle in range(360):
 			sin_a = sin(radians(angle - 90))
 			cos_a = cos(radians(angle - 90))
 
-			x_outer = self.center[0] + (cos_a * self.outer_radius)
-			y_outer = self.center[1] + (sin_a * self.outer_radius)
+			x_outer = self.center[0] + (cos_a * self.outer_radius) #! x distance from center
+			y_outer = self.center[1] + (sin_a * self.outer_radius) #! y distance from center
 
+			# self.create_oval(x_outer - 2, y_outer - 2, x_outer + 2, y_outer + 2, fill = 'orange') #! to visualize outer circle
 			if angle % 30 == 0: 
-				x_inner = self.center[0] + (cos_a * self.inner_radius)
-				y_inner = self.center[1] + (sin_a * self.inner_radius)
+				#* DRAW LINES
+				x_inner = self.center[0] + (cos_a * self.inner_radius) 
+				y_inner = self.center[1] + (sin_a * self.inner_radius) 
+				self.create_line((x_inner, y_inner), (x_outer, y_outer), fill = WHITE, width = LINE_WIDTH) #! draw line from inner circle to outer for the ticks
 
-				self.create_line((x_inner, y_inner), (x_outer, y_outer), fill = WHITE, width = LINE_WIDTH)
-				# self.create_oval(x_outer - 4, y_outer - 4, x_outer + 4, y_outer + 4, fill = 'orange') #! to visualize outer circle
+				#* DRAWING NUMBERS
+				x_number = self.center[0] + (cos_a * self.number_radius)
+				y_number = self.center[1] + (sin_a * self.number_radius)
+
+				self.create_text((x_number, y_number), text = f'{int(angle / 6)}', font = f'{FONT}{CLOCK_FONT_SIZE}', fill = WHITE) 
+
 
 			elif angle % 6 == 0: 
 				x_middle = self.center[0] + (cos_a * self.middle_radius)
 				y_middle = self.center[1] + (sin_a * self.middle_radius)
 
 				self.create_line((x_middle, y_middle), (x_outer, y_outer), fill = GREY, width = LINE_WIDTH)
+
+	def draw_hand(self, angle = 0): #! clock hand
+		sin_a = sin(radians(angle - 90))
+		cos_a = cos(radians(angle - 90))
+
+		x_start = self.center[0] - (cos_a * self.start_radius)
+		y_start = self.center[1] - (sin_a * self.start_radius)
+
+		x_end = self.center[0] + (cos_a * self.outer_radius)
+		y_end = self.center[1] + (sin_a * self.outer_radius)
+
+		self.create_line((x_start, y_start), (x_end, y_end), fill = ORANGE, width = LINE_WIDTH)
+
+
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 	def __init__(self, parent, button_font, start, pause, resume, reset, create_lap):
@@ -122,7 +146,7 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 		self.reset = reset
 		self.create_lap = create_lap
 		self.state = 'OFF'
-		
+			
 
 		#* GRID LAYOUT
 		self.rowconfigure(0, weight = 1, uniform = 'b')
