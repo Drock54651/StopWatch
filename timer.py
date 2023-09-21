@@ -97,6 +97,7 @@ class Clock(tk.Canvas): #! drawing the clock itself
 
 		seconds = milliseconds / 1000
 		angle = (seconds % 60) * 6 #! grabs only the seconds, multiply by 6, as 1 second is every 6 degrees -> (360 / 60)
+									#! this is used to revolve the clock hand
 		
 		self.delete('all')
 		self.create_rectangle((0,0), self.size, fill = BLACK)
