@@ -18,6 +18,7 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 		self.rowconfigure(1, weight = 1, uniform = 'a')
 		self.rowconfigure(2, weight = 4, uniform = 'a')
 		self.columnconfigure(0, weight = 1, uniform = 'a')
+
 		#* FONTS
 		self.button_fonts = ctk.CTkFont(family = FONT, size  = BUTTON_FONT_SIZE)
 
@@ -36,16 +37,25 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 
 		#* TIMER LOGIC
 		self.timer = Timer()
+		self.active = False
 
 		#* RUN
 		self.mainloop()
 
 
+	def animate(self):
+		if self.active:
+			self.clock.draw(self.timer.get_time())
+			self.after(FRAMERATE, self.animate)
+
 	def start(self):
 		self.timer.start()
+		self.active = True
+		self.animate()
 
 	def pause(self):
 		self.timer.pause()
+		self.active = False
 
 	def resume(self):
 		self.timer.resume()
@@ -55,6 +65,7 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 
 	def create_lap(self):
 		print(self.timer.get_time())
+
 
 class Clock(tk.Canvas): #! drawing the clock itself
 	def __init__(self, parent):
@@ -79,8 +90,14 @@ class Clock(tk.Canvas): #! drawing the clock itself
 		self.draw()
 
 	def draw(self, milliseconds = 0): #! contains all the parts of the clock to draw
+
+		seconds = milliseconds / 1000
+		angle = (seconds % 60) * 6 #! grabs only the seconds, multiply by 6, as 1 second is every 6 degrees -> (360 / 60)
+		
+		self.delete('all')
+
 		self.draw_clock()
-		self.draw_hand(30)
+		self.draw_hand(angle)
 		self.draw_center()
 
 	def draw_center(self): #! Draw the circle center of the clock
@@ -132,8 +149,6 @@ class Clock(tk.Canvas): #! drawing the clock itself
 		y_end = self.center[1] + (sin_a * self.outer_radius)
 
 		self.create_line((x_start, y_start), (x_end, y_end), fill = ORANGE, width = LINE_WIDTH)
-
-
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 	def __init__(self, parent, button_font, start, pause, resume, reset, create_lap):
