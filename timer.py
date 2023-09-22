@@ -4,6 +4,11 @@ from time import time
 import tkinter as tk
 from math import sin, cos, radians
 
+try:
+	from ctypes import windll, byref, sizeof, c_int
+except:
+	pass
+
 class App(ctk.CTk): #! window and also methods for button functionality logic
 	def __init__(self):
 		super().__init__(fg_color = BLACK)
@@ -11,7 +16,7 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 		self.geometry('300x600')
 		self.iconbitmap('empty.ico')
 		self.resizable(False,False)
-
+		self.title_bar()
 
 		#* LAYOUT
 		self.rowconfigure(0, weight = 5, uniform = 'a')
@@ -70,6 +75,15 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 	def create_lap(self):
 		print(self.timer.get_time())
 
+	def title_bar(self):
+		try:
+			HWND = windll.user32.GetParent(self.winfo_id())
+			DWMWA_ATTRIBUTE = 35
+			COLOR = 0x00000000
+			windll.dwmapi.DwmSetWindowAttribute(HWND, DWMWA_ATTRIBUTE, byref(c_int(COLOR)), sizeof(c_int))
+
+		except:
+			pass
 
 class Clock(tk.Canvas): #! drawing the clock itself
 	def __init__(self, parent):
