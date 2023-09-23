@@ -296,7 +296,7 @@ class Timer: #! Timer Logic
 def convert_ms_to_time_string(milliseconds):
 	if milliseconds > 0:
 		#* GET UNITS	
-		milliseconds_only = str(milliseconds)[-3:-1] #! if ms is 5680, this will grab 68
+		milliseconds_only = str(milliseconds)[-3:-1] #! if ms is 5680, this will grab 68 or if 10520 grabs the 52
 		seconds_only = str(milliseconds)[:-3] if milliseconds >= 1000 else 0 #! this will grab 5
  
 		minutes, seconds = divmod(int(seconds_only), 60) #! div mod returns (quotient, remainder) so divmod(65,60) will return (1,5)
