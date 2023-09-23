@@ -316,9 +316,6 @@ def convert_ms_to_time_string(milliseconds):
 		
 		else:
 			output_text = f'{seconds_string}.{milliseconds_only}'
-
-
-		return output_text
 	
 	else:
 		output_text = ''
