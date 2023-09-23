@@ -48,7 +48,7 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 		self.mainloop()
 
 
-	def animate(self):
+	def animate(self): #! the reason why everything works and is animated
 		if self.active:
 			self.clock.draw(self.timer.get_time())
 			self.after(FRAMERATE, self.animate)
