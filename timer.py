@@ -117,6 +117,7 @@ class Clock(tk.Canvas): #! drawing the clock itself
 		self.create_rectangle((0,0), self.size, fill = BLACK)
 
 		self.draw_clock()
+		self.draw_text(milliseconds)
 		self.draw_hand(angle)
 		self.draw_center()
 
@@ -169,6 +170,10 @@ class Clock(tk.Canvas): #! drawing the clock itself
 		y_end = self.center[1] + (sin_a * self.outer_radius)
 
 		self.create_line((x_start, y_start), (x_end, y_end), fill = ORANGE, width = LINE_WIDTH)
+
+	def draw_text(self, milliseconds):
+		self.output_text = convert_ms_to_time_string(milliseconds)
+		self.create_text((self.center[0], self.center[1] + 50), text = self.output_text, fill = WHITE, anchor = 'center', font = f'{FONT}{CLOCK_FONT_SIZE}')
 
 class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 	def __init__(self, parent, button_font, start, pause, resume, reset, create_lap):
@@ -288,7 +293,37 @@ class Timer: #! Timer Logic
 
 
 
+def convert_ms_to_time_string(milliseconds):
+	if milliseconds > 0:
+		#* GET UNITS	
+		milliseconds_only = str(milliseconds)[-3:-1] #! if ms is 5680, this will grab 68
+		seconds_only = str(milliseconds)[:-3] if milliseconds >= 1000 else 0 #! this will grab 5
+ 
+		minutes, seconds = divmod(int(seconds_only), 60) #! div mod returns (quotient, remainder) so divmod(65,60) will return (1,5)
+		hours, minutes = divmod(minutes, 60)
 
+		#* CONVERT UNITS TO STRINGS
+		seconds_string = str(seconds) if seconds >= 10 else f'0{seconds}' #! makes text look nicer if seconds is only single digit, this would make 05:00 5 seconds instead of 5:00 
+		minute_string = str(minutes) if minutes >= 10 else f'0{minutes}'
+		hour_string = str(hours) if hours >= 10 else f'0{hours}'
+
+		#* GET OUTPUT STRING
+		if hours > 0:
+			output_text = f'{hour_string}:{minute_string}:{seconds_string}.{milliseconds_only}'
+
+		elif minutes > 0:
+			output_text = f'{minute_string}:{seconds_string}.{milliseconds_only}'
+		
+		else:
+			output_text = f'{seconds_string}.{milliseconds_only}'
+
+
+		return output_text
+	
+	else:
+		output_text = ''
+
+	return output_text
 
 
 if __name__ == '__main__':
