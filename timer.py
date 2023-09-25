@@ -39,10 +39,12 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 			reset = self.reset,
 			create_lap = self.create_lap)
 		self.clock = Clock(self)
+		self.lap_container = LapContainer(self)
 
 		#* TIMER LOGIC
 		self.timer = Timer()
 		self.active = False
+		self.lap_data = []
 
 		#* RUN
 		self.mainloop()
@@ -62,6 +64,8 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 		self.timer.pause()
 		self.active = False
 
+		self.create_lap('Pause')
+
 	def resume(self):
 		self.timer.resume()
 		self.active = True
@@ -72,8 +76,11 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 		self.active = False
 		self.clock.draw(0)
 
-	def create_lap(self):
-		print(self.timer.get_time())
+	def create_lap(self, lap_type): #! lap type consists of 'Lap' and 'Pause'
+		lap_num = len([lap for lap in self.lap_data if lap[0] == 'Lap']) + 1
+		index = str(lap_num) if lap_type  == 'Lap' else ''
+		self.lap_data.append((lap_type, index, self.timer.get_time())) #! takes in lap type, index, time
+		self.lap_container.create(self.lap_data) #! calls method in lap container class
 
 	def title_bar(self):
 		try:
@@ -238,7 +245,7 @@ class ControlButtons(ctk.CTkFrame): #! frame for all the buttons
 
 	def lap_handler(self): #! handles create_lap and reset method for lap button
 		if self.state == 'ON':
-			self.create_lap()
+			self.create_lap('Lap')
 
 		else:
 			self.reset()
@@ -290,8 +297,14 @@ class Timer: #! Timer Logic
 		else:
 			return int(round(time() - self.start_time, 2) * 1000) #! ms cause easier to work with
 
+class LapContainer(ctk.CTkFrame):
+	def __init__(self, parent):
+		super().__init__(parent, fg_color = BLACK)
+		self.grid(row = 2, column = 0, sticky = 'news')
+		self.canvas = None
 
-
+	def create(self, data):
+		item_number = len(data)
 
 def convert_ms_to_time_string(milliseconds):
 	if milliseconds > 0:
