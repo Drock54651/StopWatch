@@ -304,7 +304,27 @@ class LapContainer(ctk.CTkFrame):
 		self.canvas = None
 
 	def create(self, data):
+		
+		#* CLEAR CANVAS	
+		if self.canvas:
+			self.canvas.pack_forget()
+
+		#* DATA SETUP
 		item_number = len(data)
+		list_height = item_number * LAP_ITEM_HEIGHT	#! if list height becomes greater than the container height, then we add scrollable option
+		scrollable = list_height > self.winfo_height() #! scrollable = True or False
+		scroll_height = list_height if scrollable else self.winfo_height()
+
+
+		#* CANVAS SETUP
+		self.canvas = tk.Canvas(self, 
+						  background = BLACK, 
+						  scrollregion = (0, 0, self.winfo_width(), scroll_height),
+						  bd = 0,
+						  highlightthickness = 0,
+						  relief = 'ridge')
+		self.canvas.pack(fill = 'both', expand = True)
+
 
 def convert_ms_to_time_string(milliseconds):
 	if milliseconds > 0:
