@@ -327,8 +327,9 @@ class LapContainer(ctk.CTkFrame):
 
 		#* CREATE ITEMS: this will show laps and times
 		display_frame = ctk.CTkFrame(self, fg_color = BLACK)
-		for item in data:
-			self.item(display_frame, item).pack(fill = 'both', expand = True)
+		for index, item in enumerate(data):
+			last_item = index == item_number - 1
+			self.item(display_frame, item, item_number - 1).pack(fill = 'both', expand = True)
 
 
 		self.canvas.create_window( #! placing display frame on the canvas
@@ -339,12 +340,20 @@ class LapContainer(ctk.CTkFrame):
 			height = list_height
 		)
 		
-	def item(self, parent, info):
+	def item(self, parent, info, last_item):
 		frame = ctk.CTkFrame(parent, fg_color = BLACK)
 		info_frame = ctk.CTkFrame(frame, fg_color = BLACK)
 		ctk.CTkLabel(info_frame, text = f'{info[0]} {info[1]}').pack(side = 'left', padx = 10)
-		ctk.CTkLabel(info_frame, text = f'{info[2]}').pack(side = 'right', padx = 10)
+		ctk.CTkLabel(info_frame, text = f'{convert_ms_to_time_string(info[2])}').pack(side = 'right', padx = 10)
 		info_frame.pack(fill = 'both', expand = True)
+
+		#* SEPERATOR 
+		if not last_item:
+		
+			seperator_frame = ctk.CTkFrame(frame, fg_color = WHITE, height = 1.2)
+			seperator_frame.pack(fill = 'x')
+
+
 		return frame
 
 def convert_ms_to_time_string(milliseconds):
