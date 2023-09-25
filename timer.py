@@ -325,6 +325,23 @@ class LapContainer(ctk.CTkFrame):
 						  relief = 'ridge')
 		self.canvas.pack(fill = 'both', expand = True)
 
+		#* CREATE ITEMS: this will show laps and times
+		display_frame = ctk.CTkFrame(self, fg_color = BLACK)
+		for item in data:
+			self.item(display_frame, item).pack(fill = 'both', expand = True)
+
+
+		self.canvas.create_window( #! placing display frame on the canvas
+			(0,0),
+			anchor = 'nw',
+			window = display_frame,
+			width = self.winfo_width(),
+			height = list_height
+		)
+		
+	def item(self, parent, info):
+		frame = ctk.CTkFrame(parent, fg_color = RED)
+		return frame
 
 def convert_ms_to_time_string(milliseconds):
 	if milliseconds > 0:
