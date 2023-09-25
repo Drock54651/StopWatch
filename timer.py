@@ -340,7 +340,11 @@ class LapContainer(ctk.CTkFrame):
 		)
 		
 	def item(self, parent, info):
-		frame = ctk.CTkFrame(parent, fg_color = RED)
+		frame = ctk.CTkFrame(parent, fg_color = BLACK)
+		info_frame = ctk.CTkFrame(frame, fg_color = BLACK)
+		ctk.CTkLabel(info_frame, text = f'{info[0]} {info[1]}').pack(side = 'left', padx = 10)
+		ctk.CTkLabel(info_frame, text = f'{info[2]}').pack(side = 'right', padx = 10)
+		info_frame.pack(fill = 'both', expand = True)
 		return frame
 
 def convert_ms_to_time_string(milliseconds):
