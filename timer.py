@@ -75,6 +75,8 @@ class App(ctk.CTk): #! window and also methods for button functionality logic
 		self.timer.reset()
 		self.active = False
 		self.clock.draw(0)
+		self.lap_data.clear()
+		self.lap_container.clear_container()
 
 	def create_lap(self, lap_type): #! lap type consists of 'Lap' and 'Pause'
 		lap_num = len([lap for lap in self.lap_data if lap[0] == 'Lap']) + 1
@@ -274,13 +276,12 @@ class Timer: #! Timer Logic
 
 	def start(self):
 		self.start_time = time() #! time in seconds since 1970, this is fixed when start is pressed
-		print('start')
+		
 
 	def pause(self):
 		self.pause_time = time()
 		self.is_paused = True
-		print('pause')
-
+		
 	def resume(self):
 		elapsed_time = time() - self.pause_time
 		self.start_time += elapsed_time
@@ -307,7 +308,7 @@ class LapContainer(ctk.CTkFrame):
 		
 		#* CLEAR CANVAS	
 		if self.canvas:
-			self.canvas.pack_forget()
+			self.clear_container()
 
 		#* DATA SETUP
 		item_number = len(data)
@@ -328,9 +329,11 @@ class LapContainer(ctk.CTkFrame):
 		#* CREATE ITEMS: this will show laps and times
 		display_frame = ctk.CTkFrame(self, fg_color = BLACK)
 		for index, item in enumerate(data):
-			last_item = index == item_number - 1
-			self.item(display_frame, item, item_number - 1).pack(fill = 'both', expand = True)
+			last_item = index == item_number - 1 #! last_item will be true if index == item_number -1
+			self.item(display_frame, item, last_item).pack(fill = 'both')
 
+		if scrollable:
+			self.canvas.bind_all('<MouseWheel>', lambda event: self.canvas.yview_scroll(-int(event.delta / 60), "units"))
 
 		self.canvas.create_window( #! placing display frame on the canvas
 			(0,0),
@@ -345,16 +348,20 @@ class LapContainer(ctk.CTkFrame):
 		info_frame = ctk.CTkFrame(frame, fg_color = BLACK)
 		ctk.CTkLabel(info_frame, text = f'{info[0]} {info[1]}').pack(side = 'left', padx = 10)
 		ctk.CTkLabel(info_frame, text = f'{convert_ms_to_time_string(info[2])}').pack(side = 'right', padx = 10)
-		info_frame.pack(fill = 'both', expand = True)
+		info_frame.pack(fill = 'x')
+		# print(last_item)
 
 		#* SEPERATOR 
 		if not last_item:
 		
-			seperator_frame = ctk.CTkFrame(frame, fg_color = WHITE, height = 1.2)
+			seperator_frame = ctk.CTkFrame(frame, fg_color = GREY, height = 1.2)
 			seperator_frame.pack(fill = 'x')
 
 
 		return frame
+	
+	def clear_container(self):
+		self.canvas.pack_forget()
 
 def convert_ms_to_time_string(milliseconds):
 	if milliseconds > 0:
